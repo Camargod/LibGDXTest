@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="56">
+ <tileset firstgid="1" source="HorrorHouseTiles.tsx"/>
+ <layer id="2" name="Tile Layer" width="30" height="30">
+  <data encoding="base64" compression="zlib">
+   eAELZGBgCBwgnAi0N51OOAnJjxlAdhqdcOGovXQJ69Fwpk+aHg3n0XCmRdk5mq5G09VouqI8DYzmI8rDkJh0OBrOIyeck4Ft+BQ64VSk/kLgALABogleTw==
+  </data>
+ </layer>
+ <layer id="5" name="Items Tiles" width="30" height="30">
+  <data encoding="base64" compression="zlib">
+   eAHtkMENgkAQRekAO5AOsBVveoEOsAPpQBtQoQAECtAOtAvtAO684HKfZMycZpLHDslnH/lR9JuMI1fuO77fhzukR0HwEMKaXepbckeWMrxo9uU+6XkieA5hzS71ec6ugS2qfyP5+xuhCmq4wBUspkXSQQ8N3MHHG/AGvAFvwBvwBmwaiNGsbFSz5cPzC2tIwGoGRCOksIEHPMF6Xgjf1lIj3wQ2ySuM
+  </data>
+ </layer>
+ <objectgroup id="4" name="House Items">
+  <object id="31" x="16" y="112" width="336" height="16"/>
+  <object id="32" x="0" y="112" width="16" height="368"/>
+  <object id="34" x="32" y="464" width="448" height="16"/>
+  <object id="35" x="16" y="464" width="16" height="16"/>
+  <object id="36" x="464" y="0" width="16" height="464"/>
+  <object id="37" x="0" y="0" width="480" height="16"/>
+  <object id="38" x="16" y="16" height="96"/>
+  <object id="39" x="48" y="0" width="16" height="48"/>
+  <object id="40" x="32" y="0" width="16" height="48"/>
+  <object id="41" x="48" y="48" width="16"/>
+  <object id="42" x="96" y="0" width="16" height="48"/>
+  <object id="43" x="80" y="0" width="16" height="32"/>
+  <object id="44" x="80" y="32" width="16" height="16"/>
+  <object id="45" x="144" y="0" width="16" height="48"/>
+  <object id="46" x="128" y="0" width="16" height="48"/>
+  <object id="47" x="176" y="0" width="32" height="48"/>
+  <object id="51" x="224" y="0" width="32" height="48"/>
+  <object id="52" x="288" y="0" width="16" height="48"/>
+  <object id="53" x="272" y="0" width="16" height="48"/>
+ </objectgroup>
+</map>
