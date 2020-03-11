@@ -1,10 +1,8 @@
 package com.mygdx.game.objects;
 
-
-import java.io.Console;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector2;
@@ -24,17 +22,22 @@ public class Player extends Sprite
 	private String name = "Default";
 	private float X = 32f;
 	private float Y = 32f;
-	private float pastX = 0f;
-	private float pastY = 0f;
 	private Texture playerSprite;
-	private Array<TextureRegion> sprites;
+	private Array<TextureRegion> idleSprite;
+	private Array<TextureRegion> upSprite;
+	private Array<TextureRegion> downSprite;
+	private Array<TextureRegion> leftSprite;
+	private Array<TextureRegion> rightSprite;
 	public Animation<TextureRegion> playerAnim;
+	private float animationSpeed = 0.2f;
+
 	private boolean isRunning = false;
 	private int health = 25;
 	private float walkSpeed = 4.25f;
 	private float runSpeed = 5.25f;
 	private float speedMulti = 1f;
 	private float maxSpeed = 1f;
+	private String playerDirection = "idle";
 	
 	public Player(String name, MainMenuScreen screen)
 	{
@@ -44,14 +47,42 @@ public class Player extends Sprite
 
 		playerSprite = new Texture(Gdx.files.internal("player/knight.png"));
 
-		sprites = new Array<TextureRegion>();
+		idleSprite = new Array<TextureRegion>();
+		upSprite = new Array<TextureRegion>();
+		downSprite = new Array<TextureRegion>();
+		leftSprite = new Array<TextureRegion>();
+		rightSprite = new Array<TextureRegion>();
 
 		//tamanho do sprite 34/82
 		for(int i = 0; i <=3; i++)
 		{
-			sprites.add(new TextureRegion(playerSprite,24 +((34 * i) + (50 * i)),0,34,82));
+			idleSprite.add(new TextureRegion(playerSprite,24 +((34 * i) + (50 * i)),0,34,82));
 		}
-		playerAnim = new Animation(0.1f,sprites);
+		for(int i = 4; i <=7; i++)
+		{
+			downSprite.add(new TextureRegion(playerSprite,24 +((34 * i) + (50 * i)),0,34,82));
+		}
+		for(int i = 1; i <=4; i++)
+		{
+			upSprite.add(new TextureRegion(playerSprite,24 +((34 * i) + (50 * i)),98,34,82));
+		}
+		for(int i = 5; i <=7; i++)
+		{
+			rightSprite.add(new TextureRegion(playerSprite,24 +((34 * i) + (50 * i)),98,34,82));
+		}
+		for(int i = 0; i <=3; i++)
+		{
+			rightSprite.add(new TextureRegion(playerSprite,24 +((34 * i) + (50 * i)),178,34,82));
+		}
+		for(int i = 4; i <=7; i++)
+		{
+			leftSprite.add(new TextureRegion(playerSprite,24 +((34 * i) + (50 * i)),178,34,82));
+		}
+		for(int i = 0; i <=2; i++)
+		{
+			leftSprite.add(new TextureRegion(playerSprite,24 +((34 * i) + (50 * i)),262,34,82));
+		}
+		
 
 		definePlayer();
 	}
@@ -84,9 +115,9 @@ public class Player extends Sprite
 			{
 				if(b2Body.getLinearVelocity().x <= maxSpeed)
 				{
-
 					b2Body.applyLinearImpulse(new Vector2((walkSpeed * speedMulti * (isRunning ? runSpeed : 1))/MyGdxGame.PPM,0), b2Body.getWorldCenter(), true);
 				}
+				playerDirection = "RIGHT";
 				break;
 			}
 			case Input.Keys.A:
@@ -95,6 +126,7 @@ public class Player extends Sprite
 				{
 					b2Body.applyLinearImpulse(new Vector2(-(walkSpeed * speedMulti * (isRunning ? runSpeed : 1))/MyGdxGame.PPM,0), b2Body.getWorldCenter(), true);
 				}
+				playerDirection = "LEFT";
 				break;
 			}
 			case Input.Keys.W:
@@ -103,19 +135,22 @@ public class Player extends Sprite
 				{
 					b2Body.applyLinearImpulse(new Vector2(0,(walkSpeed * speedMulti * (isRunning ? runSpeed : 1))/MyGdxGame.PPM), b2Body.getWorldCenter(), true);
 				}
+				playerDirection = "UP";
 				break;
 			}
 			case Input.Keys.S:
 			{
 				if(b2Body.getLinearVelocity().y >= -maxSpeed)
 				{
-					pastY = Y;
-					Y -= (walkSpeed * speedMulti * (isRunning ? runSpeed : 1))/MyGdxGame.PPM;
 					b2Body.applyLinearImpulse(new Vector2(0,-(walkSpeed * speedMulti * (isRunning ? runSpeed : 1))/MyGdxGame.PPM), b2Body.getWorldCenter(), true);
 				}
+				playerDirection = "DOWN";
 				break;
 			}
-			default:
+			case 0:
+			{
+				playerDirection = "idle";
+			}
 		}
 	}
 	
@@ -132,15 +167,49 @@ public class Player extends Sprite
 	public void setRunningState(boolean param)
 	{
 		isRunning = param;
+		animationSpeed = param ? 0.1f : 0.4f;
 	}
 
-	public void update(SpriteBatch batch, float elapsedTime)
+	// public void update(SpriteBatch batch, float elapsedTime)
+	// {
+	// 	X = b2Body.getPosition().x;
+	// 	Y = b2Body.getPosition().y;
+	// 	batch.begin();
+	// 	batch.draw(playerAnim.getKeyFrame(elapsedTime,true), MyGdxGame.V_WIDTH/2 - 17, MyGdxGame.V_HEIGHT/2 - 10);
+	// 	batch.end();
+	// }
+	public void draw (SpriteBatch batch, float elapsedTime)
 	{
-		X = b2Body.getPosition().x;
-		Y = b2Body.getPosition().y;
 		batch.begin();
-		batch.draw(playerAnim.getKeyFrame(elapsedTime,true), MyGdxGame.V_WIDTH/2 - 17, MyGdxGame.V_HEIGHT/2 - 10);
+		switchDraw(playerDirection, batch, elapsedTime);
 		batch.end();
+	}
+	public void switchDraw(String state, SpriteBatch batch, float elapsedTime)
+	{
+		switch(state)
+		{
+			case "idle":
+				playerAnim = new Animation<TextureRegion>(0.1f,idleSprite);
+				batch.draw(playerAnim.getKeyFrame(elapsedTime,true), MyGdxGame.V_WIDTH/2 - 17, MyGdxGame.V_HEIGHT/2 - 10);
+				break;
+			case "UP":
+				playerAnim = new Animation<TextureRegion>(animationSpeed,upSprite);
+				batch.draw(playerAnim.getKeyFrame(elapsedTime,true), MyGdxGame.V_WIDTH/2 - 17, MyGdxGame.V_HEIGHT/2 - 10);
+				break;
+			case "DOWN":
+				playerAnim = new Animation<TextureRegion>(animationSpeed,downSprite);
+				batch.draw(playerAnim.getKeyFrame(elapsedTime,true), MyGdxGame.V_WIDTH/2 - 17, MyGdxGame.V_HEIGHT/2 - 10);
+				break;
+			case "LEFT":
+				playerAnim = new Animation<TextureRegion>(animationSpeed,leftSprite);
+				batch.draw(playerAnim.getKeyFrame(elapsedTime,true), MyGdxGame.V_WIDTH/2 - 17, MyGdxGame.V_HEIGHT/2 - 10);
+				break;
+			case "RIGHT":
+				playerAnim = new Animation<TextureRegion>(animationSpeed,rightSprite);
+				batch.draw(playerAnim.getKeyFrame(elapsedTime,true), MyGdxGame.V_WIDTH/2 - 17, MyGdxGame.V_HEIGHT/2 - 10);
+				break;
+		}
+		
 	}
 	
 }
