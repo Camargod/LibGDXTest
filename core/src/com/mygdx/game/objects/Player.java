@@ -2,7 +2,6 @@ package com.mygdx.game.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector2;
@@ -39,7 +38,7 @@ public class Player extends Sprite
 	private float maxSpeed = 1f;
 	private String playerDirection = "idle";
 	
-	public Player(String name, MainMenuScreen screen)
+	public Player(String name, MainMenuScreen screen, MyGdxGame game)
 	{
 		super();
 		this.name = name;
@@ -62,11 +61,11 @@ public class Player extends Sprite
 		{
 			downSprite.add(new TextureRegion(playerSprite,24 +((34 * i) + (50 * i)),0,34,82));
 		}
-		for(int i = 1; i <=4; i++)
+		for(int i = 1; i <=5; i++)
 		{
 			upSprite.add(new TextureRegion(playerSprite,24 +((34 * i) + (50 * i)),98,34,82));
 		}
-		for(int i = 5; i <=7; i++)
+		for(int i = 6; i <=7; i++)
 		{
 			rightSprite.add(new TextureRegion(playerSprite,24 +((34 * i) + (50 * i)),98,34,82));
 		}
@@ -78,11 +77,10 @@ public class Player extends Sprite
 		{
 			leftSprite.add(new TextureRegion(playerSprite,24 +((34 * i) + (50 * i)),178,34,82));
 		}
-		for(int i = 0; i <=2; i++)
+		for(int i = 0; i <=1; i++)
 		{
 			leftSprite.add(new TextureRegion(playerSprite,24 +((34 * i) + (50 * i)),262,34,82));
 		}
-		
 
 		definePlayer();
 	}
@@ -167,7 +165,7 @@ public class Player extends Sprite
 	public void setRunningState(boolean param)
 	{
 		isRunning = param;
-		animationSpeed = param ? 0.1f : 0.4f;
+		animationSpeed = param ? 0.2f : 0.4f;
 	}
 
 	// public void update(SpriteBatch batch, float elapsedTime)

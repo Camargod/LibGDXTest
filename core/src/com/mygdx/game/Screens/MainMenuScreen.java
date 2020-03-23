@@ -6,18 +6,10 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -28,14 +20,15 @@ import com.mygdx.game.Tools.Box2DWorldCreator;
 import com.mygdx.game.Tools.SoundPlayer;
 import com.mygdx.game.objects.Player;
 
-public class MainMenuScreen implements Screen {
+public class MainMenuScreen implements Screen 
+{
 	private InputProcessor InputCore;
 
 	private MyGdxGame game;
 	
 	private Viewport gameViewPort;
 	private Hud hud;
-	private OrthographicCamera gameCamera;
+	public OrthographicCamera gameCamera;
 	
 	private TmxMapLoader maploader;
 	private TiledMap map;
@@ -51,12 +44,13 @@ public class MainMenuScreen implements Screen {
 	{
 		this.game = game;
 		world = new World(new Vector2(0,0), true);
+
 		maploader = new TmxMapLoader();
-		this.player = new Player("Gabriel", this);
+		this.player = new Player("Gabriel", this, game);
 		gameCamera = new OrthographicCamera();
 		gameViewPort = new FitViewport((MyGdxGame.V_WIDTH/2.8f)/MyGdxGame.PPM,(MyGdxGame.V_HEIGHT/2.8f)/MyGdxGame.PPM,gameCamera);
 		hud = new Hud(game.batch);
-		
+
 		maploader = new TmxMapLoader();
 		map = maploader.load("map002.tmx");
 		renderer = new OrthogonalTiledMapRenderer(map, 1 / MyGdxGame.PPM);
@@ -65,8 +59,6 @@ public class MainMenuScreen implements Screen {
 		worldColisions = new Box2DWorldCreator(world,map);
 
 		gameCamera.position.set(gameViewPort.getWorldWidth()/2, gameViewPort.getWorldWidth()/4,0);
-		
-
 		
 		InputCore = new InputCore(gameCamera);
 		Gdx.input.setInputProcessor(InputCore);
@@ -123,10 +115,10 @@ public class MainMenuScreen implements Screen {
 		game.elapsedTime += Gdx.graphics.getDeltaTime();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 		renderer.render();
 		worldColisions.b2dr.render(world, gameCamera.combined);
 		player.draw(game.batch,game.elapsedTime);
-		game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 		hud.stage.draw();
 		update(delta);
 	}
@@ -148,6 +140,7 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void dispose() {}
+
 	public World getWorld()
 	{
 		return world;
